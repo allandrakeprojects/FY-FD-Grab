@@ -38,21 +38,22 @@
             this.pictureBox_close = new System.Windows.Forms.PictureBox();
             this.label_brand = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label_player_last_registered = new System.Windows.Forms.Label();
-            this.panel_landing = new System.Windows.Forms.Panel();
-            this.pictureBox_landing = new System.Windows.Forms.PictureBox();
+            this.label_player_last_bill_no = new System.Windows.Forms.Label();
             this.timer_landing = new System.Windows.Forms.Timer(this.components);
             this.label_page_count = new System.Windows.Forms.Label();
             this.label_currentrecord = new System.Windows.Forms.Label();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.pictureBox_loader = new System.Windows.Forms.PictureBox();
+            this.panel_landing = new System.Windows.Forms.Panel();
+            this.pictureBox_landing = new System.Windows.Forms.PictureBox();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.panel_header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_header)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_minimize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_close)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_loader)).BeginInit();
             this.panel_landing.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_landing)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_loader)).BeginInit();
             this.SuspendLayout();
             // 
             // panel_header
@@ -72,7 +73,7 @@
             // 
             // pictureBox_header
             // 
-            this.pictureBox_header.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_header.Image")));
+            this.pictureBox_header.Image = global::FY_FD_Grab.Properties.Resources.fd_header;
             this.pictureBox_header.Location = new System.Drawing.Point(21, 9);
             this.pictureBox_header.Name = "pictureBox_header";
             this.pictureBox_header.Size = new System.Drawing.Size(28, 24);
@@ -153,40 +154,19 @@
             this.panel2.TabStop = true;
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
             // 
-            // label_player_last_registered
+            // label_player_last_bill_no
             // 
-            this.label_player_last_registered.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label_player_last_registered.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_player_last_registered.Location = new System.Drawing.Point(0, 197);
-            this.label_player_last_registered.Name = "label_player_last_registered";
-            this.label_player_last_registered.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.label_player_last_registered.Size = new System.Drawing.Size(466, 23);
-            this.label_player_last_registered.TabIndex = 8;
-            this.label_player_last_registered.Text = "-";
-            this.label_player_last_registered.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label_player_last_registered.Visible = false;
-            this.label_player_last_registered.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_player_last_registered_MouseDown);
-            // 
-            // panel_landing
-            // 
-            this.panel_landing.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(90)))), ((int)(((byte)(101)))));
-            this.panel_landing.Controls.Add(this.pictureBox_landing);
-            this.panel_landing.Location = new System.Drawing.Point(0, 10);
-            this.panel_landing.Name = "panel_landing";
-            this.panel_landing.Size = new System.Drawing.Size(468, 457);
-            this.panel_landing.TabIndex = 0;
-            this.panel_landing.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_landing_MouseDown);
-            // 
-            // pictureBox_landing
-            // 
-            this.pictureBox_landing.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_landing.Image")));
-            this.pictureBox_landing.Location = new System.Drawing.Point(183, 169);
-            this.pictureBox_landing.Name = "pictureBox_landing";
-            this.pictureBox_landing.Size = new System.Drawing.Size(111, 113);
-            this.pictureBox_landing.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox_landing.TabIndex = 0;
-            this.pictureBox_landing.TabStop = false;
-            this.pictureBox_landing.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_landing_MouseDown);
+            this.label_player_last_bill_no.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_player_last_bill_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_player_last_bill_no.Location = new System.Drawing.Point(0, 197);
+            this.label_player_last_bill_no.Name = "label_player_last_bill_no";
+            this.label_player_last_bill_no.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.label_player_last_bill_no.Size = new System.Drawing.Size(466, 23);
+            this.label_player_last_bill_no.TabIndex = 8;
+            this.label_player_last_bill_no.Text = "-";
+            this.label_player_last_bill_no.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_player_last_bill_no.Visible = false;
+            this.label_player_last_bill_no.MouseClick += new System.Windows.Forms.MouseEventHandler(this.label_player_last_bill_no_MouseClick);
             // 
             // timer_landing
             // 
@@ -222,7 +202,7 @@
             this.webBrowser.ScriptErrorsSuppressed = true;
             this.webBrowser.Size = new System.Drawing.Size(445, 402);
             this.webBrowser.TabIndex = 2;
-            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.WebBrowser_DocumentCompleted);
+            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.WebBrowser_DocumentCompletedAsync);
             // 
             // pictureBox_loader
             // 
@@ -237,6 +217,33 @@
             this.pictureBox_loader.Visible = false;
             this.pictureBox_loader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_loader_MouseDown);
             // 
+            // panel_landing
+            // 
+            this.panel_landing.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(90)))), ((int)(((byte)(101)))));
+            this.panel_landing.Controls.Add(this.pictureBox_landing);
+            this.panel_landing.Location = new System.Drawing.Point(0, 10);
+            this.panel_landing.Name = "panel_landing";
+            this.panel_landing.Size = new System.Drawing.Size(468, 457);
+            this.panel_landing.TabIndex = 0;
+            this.panel_landing.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_landing_MouseDown);
+            // 
+            // pictureBox_landing
+            // 
+            this.pictureBox_landing.ErrorImage = null;
+            this.pictureBox_landing.Image = global::FY_FD_Grab.Properties.Resources.landing;
+            this.pictureBox_landing.Location = new System.Drawing.Point(183, 169);
+            this.pictureBox_landing.Name = "pictureBox_landing";
+            this.pictureBox_landing.Size = new System.Drawing.Size(111, 113);
+            this.pictureBox_landing.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_landing.TabIndex = 0;
+            this.pictureBox_landing.TabStop = false;
+            this.pictureBox_landing.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_landing_MouseDown);
+            // 
+            // timer
+            // 
+            this.timer.Interval = 15000;
+            this.timer.Tick += new System.EventHandler(this.timer_TickAsync);
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -248,7 +255,7 @@
             this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.label_page_count);
             this.Controls.Add(this.label_brand);
-            this.Controls.Add(this.label_player_last_registered);
+            this.Controls.Add(this.label_player_last_bill_no);
             this.Controls.Add(this.pictureBox_loader);
             this.Controls.Add(this.label_currentrecord);
             this.Controls.Add(this.panel_header);
@@ -267,9 +274,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_header)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_minimize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_close)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_loader)).EndInit();
             this.panel_landing.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_landing)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_loader)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -285,12 +292,13 @@
         private System.Windows.Forms.Label label_brand;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label_player_last_registered;
-        private System.Windows.Forms.Panel panel_landing;
-        private System.Windows.Forms.PictureBox pictureBox_landing;
+        private System.Windows.Forms.Label label_player_last_bill_no;
         private System.Windows.Forms.Timer timer_landing;
         private System.Windows.Forms.Label label_page_count;
         private System.Windows.Forms.Label label_currentrecord;
         private System.Windows.Forms.PictureBox pictureBox_header;
+        private System.Windows.Forms.Panel panel_landing;
+        private System.Windows.Forms.PictureBox pictureBox_landing;
+        private System.Windows.Forms.Timer timer;
     }
 }
