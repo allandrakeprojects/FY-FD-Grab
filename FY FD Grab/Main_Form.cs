@@ -33,6 +33,8 @@ namespace FY_FD_Grab
         private string __brand_code = "FY";
         private string __brand_color = "#DE1E70";
         private string __player_last_bill_no = "";
+        private string __player_id = "";
+        private string __playerlist_cn = "";
         Form __mainFormHandler;
 
         // Drag Header to Move
@@ -345,7 +347,7 @@ namespace FY_FD_Grab
         {
             if (Properties.Settings.Default.______last_bill_no == "")
             {
-                Properties.Settings.Default.______last_bill_no = "554764593017544704";
+                Properties.Settings.Default.______last_bill_no = "555062123508944896";
                 Properties.Settings.Default.Save();
             }
 
@@ -365,8 +367,8 @@ namespace FY_FD_Grab
 
             try
             {
-                string start_fy = DateTime.Now.ToString("yyyy-MM-dd 00:00:00");
-                string end_fy = DateTime.Now.ToString("yyyy-MM-dd 23:59:59");
+                string start_time = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd 00:00:00");
+                string end_time = DateTime.Now.ToString("yyyy-MM-dd 23:59:59");
                 
                 var cookie = Cookie.GetCookieInternal(webBrowser.Url, false);
                 WebClient wc = new WebClient();
@@ -378,8 +380,8 @@ namespace FY_FD_Grab
                 var reqparm_gettotal = new NameValueCollection
                 {
                     {"s_btype", ""},
-                    {"s_StartTime", start_fy},
-                    {"s_EndTime", end_fy},
+                    {"s_StartTime", start_time},
+                    {"s_EndTime", end_time},
                     {"dno", ""},
                     {"s_dpttype", "0"},
                     {"s_type", "1"},
@@ -408,10 +410,10 @@ namespace FY_FD_Grab
                 var deserializeObject_gettotal = JsonConvert.DeserializeObject(responsebody_gettotatal);
                 JObject jo_gettotal = JObject.Parse(deserializeObject_gettotal.ToString());
                 JToken jt_gettotal = jo_gettotal.SelectToken("$.iTotalRecords");
-                double get_total_records_fy = 0;
-                get_total_records_fy = double.Parse(jt_gettotal.ToString());
+                double get_total_records = 0;
+                get_total_records = double.Parse(jt_gettotal.ToString());
 
-                double result_total_records = get_total_records_fy / __display_length;
+                double result_total_records = get_total_records / __display_length;
 
                 if (result_total_records.ToString().Contains("."))
                 {
@@ -425,8 +427,8 @@ namespace FY_FD_Grab
                 var reqparm = new NameValueCollection
                 {
                     {"s_btype", ""},
-                    {"s_StartTime", start_fy},
-                    {"s_EndTime", end_fy},
+                    {"s_StartTime", start_time},
+                    {"s_EndTime", end_time},
                     {"dno", ""},
                     {"s_dpttype", "0"},
                     {"s_type", "1"},
@@ -457,7 +459,7 @@ namespace FY_FD_Grab
                 JToken count = __jo.SelectToken("$.aaData");
                 __result_count_json = count.Count();
 
-                ___PlayerList();
+                await ___PlayerListAsync();
             }
             catch (Exception err)
             {
@@ -482,7 +484,7 @@ namespace FY_FD_Grab
             }
         }
         
-        private void ___PlayerList()
+        private async Task ___PlayerListAsync()
         {
             List<string> player_info = new List<string>();
 
@@ -501,8 +503,14 @@ namespace FY_FD_Grab
                     // asdasdasd
                     if (bill_no.ToString().Trim() != Properties.Settings.Default.______last_bill_no)
                     {
-                        JToken username_get = __jo.SelectToken("$.aaData[" + ii + "][1]").ToString();
-                        string username = Regex.Match(username_get.ToString(), "<span(.*?)>(.*?)</span>").Groups[2].Value;
+                        JToken username__id = __jo.SelectToken("$.aaData[" + ii + "][1]").ToString();
+                        Match match = Regex.Match(username__id.ToString(), @"'([^']*)");
+                        if (match.Success)
+                        {
+                            __player_id = match.Groups[1].Value;
+                            await ___PlayerListContactNumberEmailAsync(__player_id);
+                        }
+                        string username = Regex.Match(username__id.ToString(), "<span(.*?)>(.*?)</span>").Groups[2].Value;
                         JToken date_deposit = __jo.SelectToken("$.aaData[" + ii + "][0]").ToString().Substring(0, 19);
                         JToken name = __jo.SelectToken("$.aaData[" + ii + "][2]").ToString();
                         JToken vip = __jo.SelectToken("$.aaData[" + ii + "][3]").ToString();
@@ -526,7 +534,7 @@ namespace FY_FD_Grab
                             __player_last_bill_no = bill_no.ToString().Trim();
                         }
 
-                        player_info.Add(username + "*|*" + name + "*|*" + date_deposit + "*|*" + vip + "*|*" + amount + "*|*" + gateway + "*|*" + status + "*|*" + bill_no);
+                        player_info.Add(username + "*|*" + name + "*|*" + date_deposit + "*|*" + vip + "*|*" + amount + "*|*" + gateway + "*|*" + status + "*|*" + bill_no + "*|*" + __playerlist_cn);
                     }
                     else
                     {
@@ -550,6 +558,7 @@ namespace FY_FD_Grab
                                 string _gateway = "";
                                 string _status = "";
                                 string _bill_no = "";
+                                string _contact_no = "";
 
                                 foreach (string value_inner in values_inner)
                                 {
@@ -595,10 +604,20 @@ namespace FY_FD_Grab
                                     {
                                         _bill_no = value_inner;
                                     }
+                                    // Contact No
+                                    else if (count == 9)
+                                    {
+                                        _contact_no = value_inner;
+                                    }
                                 }
 
-                                // ----- Insert Data                                
-                                Thread t = new Thread(delegate () { ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no); });
+                                // ----- Insert Data
+                                using (StreamWriter file = new StreamWriter(Path.GetTempPath() + @"\fdgrab_fy.txt", true, Encoding.UTF8))
+                                {
+                                    file.WriteLine(_username + "*|*" + _name + "*|*" + _date_deposit + "*|*" + _vip + "*|*" + _amount + "*|*" + _gateway + "*|*" + _status + "*|*" + _bill_no);
+                                    file.Close();
+                                }
+                                Thread t = new Thread(delegate () { ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no); });
                                 t.Start();
 
                                 __count = 0;
@@ -624,7 +643,7 @@ namespace FY_FD_Grab
             }
         }
 
-        private void ___InsertData(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no)
+        private void ___InsertData(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no, string contact_no)
         {
             try
             {
@@ -643,21 +662,17 @@ namespace FY_FD_Grab
                         ["username"] = username,
                         ["name"] = name,
                         ["date_deposit"] = date_deposit,
+                        ["contact"] = contact_no,
                         ["vip"] = vip,
                         ["gateway"] = gateway,
                         ["brand_code"] = __brand_code,
                         ["amount"] = amount_replace.ToString("N0"),
-                        ["status"] = status,
+                        ["success"] = status,
                         ["token"] = token
                     };
 
                     var response = wb.UploadValues("http://zeus.ssimakati.com:8080/API/sendFD", "POST", data);
                     string responseInString = Encoding.UTF8.GetString(response);
-
-                    using (StreamWriter file = new StreamWriter(Path.GetTempPath() + @"\fdgrab_fy.txt", true, Encoding.UTF8))
-                    {
-                        file.WriteLine(username + "*|*" + name + "*|*" + date_deposit + "*|*" + vip + "*|*" + amount + "*|*" + gateway + "*|*" + status + "*|*" + bill_no);
-                    }
                 }
             }
             catch (Exception err)
@@ -677,13 +692,13 @@ namespace FY_FD_Grab
                     }
                     else
                     {
-                        ____InsertData2(username, name, date_deposit, vip, amount, gateway, status, bill_no);
+                        ____InsertData2(username, name, date_deposit, vip, amount, gateway, status, bill_no, contact_no);
                     }
                 }
             }
         }
 
-        private void ____InsertData2(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no)
+        private void ____InsertData2(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no, string contact_no)
         {
             try
             {
@@ -702,21 +717,17 @@ namespace FY_FD_Grab
                         ["username"] = username,
                         ["name"] = name,
                         ["date_deposit"] = date_deposit,
+                        ["contact"] = contact_no,
                         ["vip"] = vip,
                         ["gateway"] = gateway,
                         ["brand_code"] = __brand_code,
                         ["amount"] = amount_replace.ToString("N0"),
-                        ["status"] = status,
+                        ["success"] = status,
                         ["token"] = token
                     };
 
                     var response = wb.UploadValues("http://zeus2.ssimakati.com:8080/API/sendFD", "POST", data);
                     string responseInString = Encoding.UTF8.GetString(response);
-
-                    using (StreamWriter file = new StreamWriter(Path.GetTempPath() + @"\fdgrab_fy.txt", true, Encoding.UTF8))
-                    {
-                        file.WriteLine(username + "*|*" + name + "*|*" + date_deposit + "*|*" + vip + "*|*" + amount + "*|*" + gateway + "*|*" + status + "*|*" + bill_no);
-                    }
                 }
             }
             catch (Exception err)
@@ -736,7 +747,7 @@ namespace FY_FD_Grab
                     }
                     else
                     {
-                        ___InsertData(username, name, date_deposit, vip, amount, gateway, status, bill_no);
+                        ___InsertData(username, name, date_deposit, vip, amount, gateway, status, bill_no, contact_no);
                     }
                 }
             }
@@ -799,7 +810,7 @@ namespace FY_FD_Grab
                 string password = "@ccess123418tech";
                 string mailFrom = "noreply@mail.com";
                 string mailTo = "drake@18tech.com";
-                string mailTitle = "FY FD Grab";
+                string mailTitle = __brand_code + " FD Grab";
                 string mailMessage = get_message;
 
                 using (SmtpClient client = new SmtpClient())
@@ -838,6 +849,78 @@ namespace FY_FD_Grab
                     MessageBox.Show(err.ToString());
                 }
             }
+        }
+        
+        private async Task ___PlayerListContactNumberEmailAsync(string id)
+        {
+            try
+            {
+                var cookie = Cookie.GetCookieInternal(webBrowser.Url, false);
+                WebClient wc = new WebClient();
+
+                wc.Headers.Add("Cookie", cookie);
+                wc.Encoding = Encoding.UTF8;
+                wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                string result_gettotal_responsebody = await wc.DownloadStringTaskAsync("http://cs.ying168.bet/player/playerDetailBox?id=" + id);
+
+                int i_label = 0;
+                int cn = 0;
+                bool cn_detect = false;
+                bool cn_ = false;
+
+                Regex ItemRegex_label = new Regex("<label class=\"control-label\">(.*?)</label>", RegexOptions.Compiled);
+                foreach (Match ItemMatch in ItemRegex_label.Matches(result_gettotal_responsebody))
+                {
+                    string item = ItemMatch.Groups[1].Value;
+                    i_label++;
+
+                    if (item.Contains("Cellphone No") || item.Contains("手机号"))
+                    {
+                        cn = i_label;
+                        cn_detect = true;
+                    }
+                    else if (item.Contains("Agent No") || item.Contains("代理编号"))
+                    {
+                        if (!cn_detect)
+                        {
+                            cn_ = true;
+                        }
+                        
+                    }
+                }
+
+                if (cn_)
+                {
+                    cn--;
+                }
+
+                int i_span = 0;
+
+                Regex ItemRegex_span = new Regex("<span class=\"text\">(.*?)</span>", RegexOptions.Compiled);
+                foreach (Match ItemMatch in ItemRegex_span.Matches(result_gettotal_responsebody))
+                {
+                    i_span++;
+                    string item = ItemMatch.Groups[1].Value;
+
+                    if (i_span == cn)
+                    {
+                        __playerlist_cn = ItemMatch.Groups[1].Value;
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                if (__isLogin)
+                {
+                    await ___PlayerListContactNumberEmailAsync(id);
+                }
+            }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            Properties.Settings.Default.______last_bill_no = "";
+            Properties.Settings.Default.Save();
         }
     }
 }
