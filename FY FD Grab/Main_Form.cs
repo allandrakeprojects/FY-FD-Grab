@@ -166,8 +166,8 @@ namespace FY_FD_Grab
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
             
-            Properties.Settings.Default.______last_bill_no = "";
-            Properties.Settings.Default.Save();
+            //Properties.Settings.Default.______last_bill_no = "";
+            //Properties.Settings.Default.Save();
         }
         private void panel2_MouseDown(object sender, MouseEventArgs e)
         {
@@ -251,6 +251,30 @@ namespace FY_FD_Grab
         private void Main_Form_Load(object sender, EventArgs e)
         {
             webBrowser.Navigate("http://cs.ying168.bet/account/login");
+            
+            if (Properties.Settings.Default.______last_bill_no == "")
+            {
+                textBox_bill_no.Visible = true;
+                ((Control)webBrowser).Enabled = false;
+            }
+        }
+
+        private void textBox_bill_no_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(textBox_bill_no.Text.Trim()))
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    DialogResult dr = MessageBox.Show("Proceed?", "FY FD Grab", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dr == DialogResult.Yes)
+                    {
+                        Properties.Settings.Default.______last_bill_no = textBox_bill_no.Text.Trim();
+                        Properties.Settings.Default.Save();
+                        textBox_bill_no.Visible = false;
+                        ((Control)webBrowser).Enabled = true;
+                    }
+                }
+            }
         }
 
         static int LineNumber([System.Runtime.CompilerServices.CallerLineNumber] int lineNumber = 0)
@@ -340,12 +364,6 @@ namespace FY_FD_Grab
         
         private void ___PlayerLastBillNo()
         {
-            if (Properties.Settings.Default.______last_bill_no == "")
-            {
-                Properties.Settings.Default.______last_bill_no = "555157188503818240";
-                Properties.Settings.Default.Save();
-            }
-
             label_player_last_bill_no.Text = "Last Bill No.: " + Properties.Settings.Default.______last_bill_no;
         }
         
@@ -666,7 +684,7 @@ namespace FY_FD_Grab
             try
             {
                 double amount_replace = Convert.ToDouble(amount);
-                string password = __brand_code + username + date_deposit + "youdieidie";
+                string password = __brand_code + username.ToLower() + date_deposit + "youdieidie";
                 byte[] encodedPassword = new UTF8Encoding().GetBytes(password);
                 byte[] hash = ((HashAlgorithm)CryptoConfig.CreateFromName("MD5")).ComputeHash(encodedPassword);
                 string token = BitConverter.ToString(hash)
@@ -723,7 +741,7 @@ namespace FY_FD_Grab
             try
             {
                 double amount_replace = Convert.ToDouble(amount);
-                string password = __brand_code + username + date_deposit + "youdieidie";
+                string password = __brand_code + username.ToLower() + date_deposit + "youdieidie";
                 byte[] encodedPassword = new UTF8Encoding().GetBytes(password);
                 byte[] hash = ((HashAlgorithm)CryptoConfig.CreateFromName("MD5")).ComputeHash(encodedPassword);
                 string token = BitConverter.ToString(hash)
@@ -902,7 +920,6 @@ namespace FY_FD_Grab
                         {
                             cn_ = true;
                         }
-                        
                     }
                 }
 

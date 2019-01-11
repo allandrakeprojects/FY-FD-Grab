@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
             this.panel_header = new System.Windows.Forms.Panel();
+            this.textBox_bill_no = new System.Windows.Forms.TextBox();
             this.pictureBox_header = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label_title = new System.Windows.Forms.Label();
@@ -59,6 +60,7 @@
             // panel_header
             // 
             this.panel_header.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(90)))), ((int)(((byte)(101)))));
+            this.panel_header.Controls.Add(this.textBox_bill_no);
             this.panel_header.Controls.Add(this.pictureBox_header);
             this.panel_header.Controls.Add(this.panel1);
             this.panel_header.Controls.Add(this.label_title);
@@ -70,6 +72,15 @@
             this.panel_header.Size = new System.Drawing.Size(466, 45);
             this.panel_header.TabIndex = 1;
             this.panel_header.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_header_MouseDown);
+            // 
+            // textBox_bill_no
+            // 
+            this.textBox_bill_no.Location = new System.Drawing.Point(162, 13);
+            this.textBox_bill_no.Name = "textBox_bill_no";
+            this.textBox_bill_no.Size = new System.Drawing.Size(139, 20);
+            this.textBox_bill_no.TabIndex = 3;
+            this.textBox_bill_no.Visible = false;
+            this.textBox_bill_no.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_bill_no_KeyDown);
             // 
             // pictureBox_header
             // 
@@ -301,5 +312,6 @@
         private System.Windows.Forms.Panel panel_landing;
         private System.Windows.Forms.PictureBox pictureBox_landing;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.TextBox textBox_bill_no;
     }
 }
