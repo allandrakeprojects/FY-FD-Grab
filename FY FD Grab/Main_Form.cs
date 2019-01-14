@@ -531,6 +531,7 @@ namespace FY_FD_Grab
                         string[] gateway__method_get = gateway__method.ToString().Split(br);
                         string gateway = gateway__method_get[0];
                         string method = gateway__method_get[4];
+                        string pg_bill_no = gateway__method_get[8];
                         JToken status = __jo.SelectToken("$.aaData[" + ii + "][12]");
                         JToken process_datetime = __jo.SelectToken("$.aaData[" + ii + "][13]");
                         string process_date = process_datetime.ToString().Substring(0, 10);
@@ -550,7 +551,7 @@ namespace FY_FD_Grab
                             __player_last_bill_no = bill_no.ToString().Trim();
                         }
 
-                        player_info.Add(username + "*|*" + name + "*|*" + date_deposit + "*|*" + vip + "*|*" + amount + "*|*" + gateway + "*|*" + status + "*|*" + bill_no + "*|*" + __playerlist_cn + "*|*" + process_datetime + "*|*" + method);
+                        player_info.Add(username + "*|*" + name + "*|*" + date_deposit + "*|*" + vip + "*|*" + amount + "*|*" + gateway + "*|*" + status + "*|*" + bill_no + "*|*" + __playerlist_cn + "*|*" + process_datetime + "*|*" + method + "*|*" + pg_bill_no);
                     }
                     else
                     {
@@ -577,6 +578,7 @@ namespace FY_FD_Grab
                                 string _contact_no = "";
                                 string _process_datetime = "";
                                 string _method = "";
+                                string _pg_bill_no = "";
 
                                 foreach (string value_inner in values_inner)
                                 {
@@ -637,22 +639,27 @@ namespace FY_FD_Grab
                                     {
                                         _method = value_inner;
                                     }
+                                    // PG Bill No
+                                    else if (count == 12)
+                                    {
+                                        _pg_bill_no = value_inner;
+                                    }
                                 }
 
                                 // ----- Insert Data
                                 using (StreamWriter file = new StreamWriter(Path.GetTempPath() + @"\fdgrab_fy.txt", true, Encoding.UTF8))
                                 {
-                                    file.WriteLine(_username + "*|*" + _name + "*|*" + _contact_no + "*|*" + _date_deposit + "*|*" + _vip + "*|*" + _amount + "*|*" + _gateway + "*|*" + _status + "*|*" + _bill_no + "*|*" + _process_datetime + "*|*" + _method);
+                                    file.WriteLine(_username + "*|*" + _name + "*|*" + _contact_no + "*|*" + _date_deposit + "*|*" + _vip + "*|*" + _amount + "*|*" + _gateway + "*|*" + _status + "*|*" + _bill_no + "*|*" + _process_datetime + "*|*" + _method + "*|*" + _pg_bill_no);
                                     file.Close();
                                 }
                                 if (__last_username == _username)
                                 {
                                     Thread.Sleep(1000);
-                                    ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method);
+                                    ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method, _pg_bill_no);
                                 }
                                 else
                                 {
-                                    ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method);
+                                    ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method, _pg_bill_no);
                                 }
                                 __last_username = _username;
 
@@ -679,7 +686,7 @@ namespace FY_FD_Grab
             }
         }
 
-        private void ___InsertData(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no, string contact_no, string process_datetime, string method)
+        private void ___InsertData(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no, string contact_no, string process_datetime, string method, string pg_bill_no)
         {
             try
             {
@@ -706,6 +713,8 @@ namespace FY_FD_Grab
                         ["success"] = status,
                         ["action_date"] = process_datetime,
                         ["method"] = method,
+                        ["trans_id"] = bill_no,
+                        ["pg_trans_id"] = pg_bill_no,
                         ["token"] = token
                     };
 
@@ -730,13 +739,13 @@ namespace FY_FD_Grab
                     }
                     else
                     {
-                        ____InsertData2(username, name, date_deposit, vip, amount, gateway, status, bill_no, contact_no, process_datetime, method);
+                        ____InsertData2(username, name, date_deposit, vip, amount, gateway, status, bill_no, contact_no, process_datetime, method, pg_bill_no);
                     }
                 }
             }
         }
 
-        private void ____InsertData2(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no, string contact_no, string process_datetime, string method)
+        private void ____InsertData2(string username, string name, string date_deposit, string vip, string amount, string gateway, string status, string bill_no, string contact_no, string process_datetime, string method, string pg_bill_no)
         {
             try
             {
@@ -763,6 +772,8 @@ namespace FY_FD_Grab
                         ["success"] = status,
                         ["action_date"] = process_datetime,
                         ["method"] = method,
+                        ["trans_id"] = bill_no,
+                        ["pg_trans_id"] = pg_bill_no,
                         ["token"] = token
                     };
 
@@ -787,7 +798,7 @@ namespace FY_FD_Grab
                     }
                     else
                     {
-                        ___InsertData(username, name, date_deposit, vip, amount, gateway, status, bill_no, contact_no, process_datetime, method);
+                        ___InsertData(username, name, date_deposit, vip, amount, gateway, status, bill_no, contact_no, process_datetime, method, pg_bill_no);
                     }
                 }
             }
@@ -946,7 +957,20 @@ namespace FY_FD_Grab
             {
                 if (__isLogin)
                 {
-                    await ___PlayerListContactNumberAsync(id);
+                    if (__send == 5)
+                    {
+                        string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
+                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        SendEmail("<html><body>Brand: <font color='" + __brand_color + "'>-----" + __brand_code + "-----</font><br/>IP: 192.168.10.252<br/>Location: Robinsons Summit Office<br/>Date and Time: [" + datetime + "]<br/>Line Number: " + LineNumber() + "<br/>Message: <b>" + err.ToString() + "</b></body></html>");
+                        __send = 0;
+
+                        __isClose = false;
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        await ___PlayerListContactNumberAsync(id);
+                    }
                 }
             }
         }
