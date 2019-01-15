@@ -1122,7 +1122,7 @@ namespace FY_FD_Grab
             __jo_auto_reject = JObject.Parse(deserializeObject.ToString());
             JToken count = __jo_auto_reject.SelectToken("$.aaData");
             __result_count_json_auto_reject = count.Count();
-            await ___PlayerListAsync_AutoRejectAsync();
+            ___PlayerListAsync_AutoRejectAsync();
             __send = 0;
         }
 
@@ -1131,7 +1131,7 @@ namespace FY_FD_Grab
         private bool __isBreak_auto_reject = false;
         private bool __isNotAutoReject = false;
         
-        private async Task ___PlayerListAsync_AutoRejectAsync()
+        private void ___PlayerListAsync_AutoRejectAsync()
         {
             List<string> player_info = new List<string>();
 
@@ -1166,7 +1166,7 @@ namespace FY_FD_Grab
 
             if (!__isNotAutoReject)
             {
-                await ___GetListDepositVerify();
+                timer_auto_reject.Start();
             }
         }
 
