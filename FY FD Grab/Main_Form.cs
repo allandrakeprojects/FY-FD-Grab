@@ -25,7 +25,6 @@ namespace FY_FD_Grab
         private bool __isLogin = false;
         private bool __isClose;
         private bool __isBreak = false;
-        private bool __autoReject = false;
         private int __secho;
         private int __display_length = 5000;
         private int __total_page;
@@ -1348,7 +1347,6 @@ namespace FY_FD_Grab
         private JObject __jo_auto_reject;
         private int __result_count_json_auto_reject;
         private bool __isBreak_auto_reject = false;
-        private bool __isNotAutoReject = false;
         
         private async Task ___PlayerListAsync_AutoRejectAsync()
         {
@@ -1376,12 +1374,27 @@ namespace FY_FD_Grab
                     if (diff.Minutes >= 15)
                     {
                         __bill_no = time__bill_no_get[4];
-                        Properties.Settings.Default.______pending_bill_no = Properties.Settings.Default.______pending_bill_no.Replace(__bill_no + "*|*", "");
-                        label1.Text = Properties.Settings.Default.______pending_bill_no;
-                        Properties.Settings.Default.Save();
 
-                        await ___Task_AutoRejectAsync();
-                        await ___AutoRejectAsync();
+                        try
+                        {
+                            Properties.Settings.Default.______pending_bill_no = Properties.Settings.Default.______pending_bill_no.Replace(__bill_no + "*|*", "");
+                            label1.Text = Properties.Settings.Default.______pending_bill_no;
+                            Properties.Settings.Default.Save();
+
+                            await ___Task_AutoRejectAsync();
+                            await ___AutoRejectAsync();
+                        }
+                        catch (Exception err)
+                        {
+                            Properties.Settings.Default.______pending_bill_no += __bill_no + "*|*";
+
+                            SendITSupport("There's a problem to the server, please re-open the application.");
+                            SendMyBot(err.ToString());
+                            __send = 0;
+
+                            __isClose = false;
+                            Environment.Exit(0);
+                        }
                     }
                 }
             }
@@ -1629,6 +1642,11 @@ namespace FY_FD_Grab
 
             byte[] result = await wc.UploadValuesTaskAsync("http://cs.ying168.bet/kzb/fund/refuse", "POST", reqparm);
             string responsebody = Encoding.UTF8.GetString(result);
+
+            if (!responsebody.ToLower().Contains("refuse deposit success"))
+            {
+                Properties.Settings.Default.______pending_bill_no += __bill_no + "*|*";
+            }
         }
 
         private async Task ___Task_AutoRejectAsync()
