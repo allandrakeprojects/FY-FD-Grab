@@ -37,7 +37,7 @@ namespace FY_FD_Grab
         #endregion
     }
 
-    public class Cookiesssss : WebBrowser
+    public class Cookie : WebBrowser
     {
         [SecurityCritical]
         public static string GetCookieInternal(Uri uri, bool throwIfNoCookie)

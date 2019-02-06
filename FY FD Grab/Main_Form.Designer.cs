@@ -48,13 +48,9 @@
             this.panel_landing = new System.Windows.Forms.Panel();
             this.pictureBox_landing = new System.Windows.Forms.PictureBox();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.timer_still_loading = new System.Windows.Forms.Timer(this.components);
-            this.timer_still_loading_1 = new System.Windows.Forms.Timer(this.components);
-            this.timer_auto_reject = new System.Windows.Forms.Timer(this.components);
             this.timer_flush_memory = new System.Windows.Forms.Timer(this.components);
             this.timer_detect_running = new System.Windows.Forms.Timer(this.components);
             this.timer_dialog = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.panel_header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_header)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_minimize)).BeginInit();
@@ -67,7 +63,6 @@
             // panel_header
             // 
             this.panel_header.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(90)))), ((int)(((byte)(101)))));
-            this.panel_header.Controls.Add(this.button1);
             this.panel_header.Controls.Add(this.label1);
             this.panel_header.Controls.Add(this.pictureBox_header);
             this.panel_header.Controls.Add(this.panel1);
@@ -266,21 +261,6 @@
             this.timer.Interval = 15000;
             this.timer.Tick += new System.EventHandler(this.timer_TickAsync);
             // 
-            // timer_still_loading
-            // 
-            this.timer_still_loading.Interval = 5000;
-            this.timer_still_loading.Tick += new System.EventHandler(this.timer_still_loading_Tick);
-            // 
-            // timer_still_loading_1
-            // 
-            this.timer_still_loading_1.Interval = 5000;
-            this.timer_still_loading_1.Tick += new System.EventHandler(this.timer_still_loading_1_Tick);
-            // 
-            // timer_auto_reject
-            // 
-            this.timer_auto_reject.Interval = 20000;
-            this.timer_auto_reject.Tick += new System.EventHandler(this.timer_auto_reject_TickAsync);
-            // 
             // timer_flush_memory
             // 
             this.timer_flush_memory.Enabled = true;
@@ -297,16 +277,6 @@
             // 
             this.timer_dialog.Interval = 10000;
             this.timer_dialog.Tick += new System.EventHandler(this.timer_dialog_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(247, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_ClickAsync);
             // 
             // Main_Form
             // 
@@ -364,13 +334,9 @@
         private System.Windows.Forms.Panel panel_landing;
         private System.Windows.Forms.PictureBox pictureBox_landing;
         private System.Windows.Forms.Timer timer;
-        private System.Windows.Forms.Timer timer_still_loading;
-        private System.Windows.Forms.Timer timer_still_loading_1;
-        private System.Windows.Forms.Timer timer_auto_reject;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timer_flush_memory;
         private System.Windows.Forms.Timer timer_detect_running;
         private System.Windows.Forms.Timer timer_dialog;
-        private System.Windows.Forms.Button button1;
     }
 }
