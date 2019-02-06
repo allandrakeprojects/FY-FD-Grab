@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -309,7 +310,7 @@ namespace FY_FD_Grab
                                 __mainFormHandler.Size = new Size(466, 468);
 
                                 string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                                SendITSupport("The application have been logout, please re-login again.");
+                                //SendITSupport("The application have been logout, please re-login again.");
                                 SendMyBot("The application have been logout, please re-login again.");
                                 __send = 0;
                             }
@@ -317,8 +318,8 @@ namespace FY_FD_Grab
                             __isLogin = false;
                             timer.Stop();
                             webBrowser.Document.Window.ScrollTo(0, webBrowser.Document.Body.ScrollRectangle.Height);
-                            webBrowser.Document.GetElementById("csname").SetAttribute("value", "fyrainfd");
-                            webBrowser.Document.GetElementById("cspwd").SetAttribute("value", "rain12345");
+                            webBrowser.Document.GetElementById("csname").SetAttribute("value", "fdrobot");
+                            webBrowser.Document.GetElementById("cspwd").SetAttribute("value", "fd12345");
                             webBrowser.Document.GetElementById("la").Enabled = false;
                             webBrowser.Visible = true;
                             webBrowser.WebBrowserShortcutsEnabled = true;
@@ -369,7 +370,7 @@ namespace FY_FD_Grab
                         if (webBrowser.Url.ToString().ToLower().Contains("error"))
                         {
                             string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                            SendITSupport("BO Error.");
+                            //SendITSupport("BO Error.");
                             SendMyBot("BO Error.");
                             __send = 0;
 
@@ -380,7 +381,7 @@ namespace FY_FD_Grab
                     catch (Exception err)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -444,7 +445,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -496,7 +497,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -527,7 +528,7 @@ namespace FY_FD_Grab
                 string start_time = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd 00:00:00");
                 string end_time = DateTime.Now.ToString("yyyy-MM-dd 23:59:59");
                 
-                var cookie = Cookie.GetCookieInternal(webBrowser.Url, false);
+                var cookie = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
                 WebClient wc = new WebClient();
 
                 wc.Headers.Add("Cookie", cookie);
@@ -625,7 +626,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -893,11 +894,11 @@ namespace FY_FD_Grab
                                 if (__last_username == _username)
                                 {
                                     Thread.Sleep(Properties.Settings.Default.______thread_mill);
-                                    ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method, _pg_bill_no);
+                                    //___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method, _pg_bill_no);
                                 }
                                 else
                                 {
-                                    ___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method, _pg_bill_no);
+                                    //___InsertData(_username, _name, _date_deposit, _vip, _amount, _gateway, _status, _bill_no, _contact_no, _process_datetime, _method, _pg_bill_no);
                                 }
                                 __last_username = _username;
 
@@ -968,7 +969,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -1027,7 +1028,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -1123,7 +1124,7 @@ namespace FY_FD_Grab
                 }
                 else
                 {
-                    SendITSupport(message);
+                    //SendITSupport(message);
                 }
             }
         }
@@ -1132,7 +1133,7 @@ namespace FY_FD_Grab
         {
             try
             {
-                var cookie = Cookie.GetCookieInternal(webBrowser.Url, false);
+                var cookie = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
                 WebClient wc = new WebClient();
 
                 wc.Headers.Add("Cookie", cookie);
@@ -1191,7 +1192,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -1210,7 +1211,7 @@ namespace FY_FD_Grab
         {
             try
             {
-                var cookie = Cookie.GetCookieInternal(webBrowser.Url, false);
+                var cookie = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
                 WebClient wc = new WebClient();
 
                 wc.Headers.Add("Cookie", cookie);
@@ -1269,7 +1270,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -1302,7 +1303,7 @@ namespace FY_FD_Grab
         {
             try
             {
-                var cookie = Cookie.GetCookieInternal(webBrowser.Url, false);
+                var cookie = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
                 WebClient wc = new WebClient();
 
                 wc.Headers.Add("Cookie", cookie);
@@ -1348,7 +1349,7 @@ namespace FY_FD_Grab
                 __send++;
                 if (__send == 5)
                 {
-                    SendITSupport("There's a problem to the server, please re-open the application.");
+                    //SendITSupport("There's a problem to the server, please re-open the application.");
                     SendMyBot(err.ToString());
                     __send = 0;
 
@@ -1486,7 +1487,7 @@ namespace FY_FD_Grab
         {
             try
             {
-                var cookie = Cookie.GetCookieInternal(webBrowser.Url, false);
+                var cookie = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
                 WebClient wc = new WebClient();
 
                 wc.Headers.Add("Cookie", cookie);
@@ -1531,7 +1532,7 @@ namespace FY_FD_Grab
                 __send++;
                 if (__send == 5)
                 {
-                    SendITSupport("There's a problem to the server, please re-open the application.");
+                    //SendITSupport("There's a problem to the server, please re-open the application.");
                     SendMyBot(err.ToString());
                     __send = 0;
 
@@ -1639,7 +1640,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -1688,7 +1689,7 @@ namespace FY_FD_Grab
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
-                        SendITSupport("There's a problem to the server, please re-open the application.");
+                        //SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
                         __send = 0;
 
@@ -1701,6 +1702,204 @@ namespace FY_FD_Grab
                     }
                 }
             }
+        }
+        
+        private async void button1_ClickAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                await ___Task_AutoRejectAsync();
+                await ___AutoRejectAsync();
+                //--------------------------------------
+
+                //--------------------------------------
+
+
+                //string responsebody = Encoding.UTF8.GetString(result);
+
+                //var deserializeObject = JsonConvert.DeserializeObject(responsebody);
+                //MessageBox.Show(result.ToString());
+
+                //using (var httpClient = new HttpClient())
+                //{
+                //    var uri = new Uri("http://cs.ying168.bet/kzb/fund/refuse");
+                //    httpClient.BaseAddress = uri;
+                //    httpClient.DefaultRequestHeaders.Add("Cookie", cookie);
+                //    var responsea = httpClient.GetAsync(uri).Result;
+                //    MessageBox.Show(responsea.ToString());
+                //}
+
+
+                //var client = new HttpClient();
+
+                //// headers
+                //client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)");
+                //client.DefaultRequestHeaders.Add("Cookie", cookie);
+
+                //var pairs = new List<KeyValuePair<string, string>>
+                //{
+                //    new KeyValuePair<string, string>("dno", "565613814092288000"),
+                //    new KeyValuePair<string, string>("dealremark", "客服拒绝")
+                //};
+
+                //var content = new FormUrlEncodedContent(pairs);
+
+                //var response = client.PostAsync("http://cs.ying168.bet/kzb/fund/refuse", content).Result;
+
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    MessageBox.Show("0");
+                //}
+                //else
+                //{
+                //    MessageBox.Show("1");
+                //}
+
+
+
+
+
+
+
+                //Build the request
+                //HttpWebRequest requesta = (HttpWebRequest)WebRequest.Create(site);
+                //CookieContainer cookies = new CookieContainer();
+                //requesta.CookieContainer = cookies;
+
+                ////Print out the number of cookies before the response (of course it will be blank)
+                //Console.WriteLine(cookies.GetCookieHeader(site));
+
+                ////Get the response and print out the cookies again
+                //using (HttpWebResponse responsea = (HttpWebResponse)requesta.GetResponse())
+                //{
+                //    MessageBox.Show(cookies.GetCookieHeader(site));
+                //}
+
+
+
+
+
+
+
+
+                //var CookieStr = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
+                //Uri site = new Uri("http://cs.ying168.bet/kzb/fund/refuse");
+                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(site);
+                //CookieContainer cookiecontainer = new CookieContainer();
+                //string[] cookies = CookieStr.Split(';');
+                //foreach (string cookie in cookies)
+                //{
+                //    if (!cookie.ToLower().Contains("sprymedia"))
+                //    {
+                //        cookiecontainer.SetCookies(site, cookie);
+                //    }
+                //}
+                //request.CookieContainer = cookiecontainer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //request.KeepAlive = true;
+                //request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)";    
+                //var postData = "dno=565658971340689408";
+                //postData += "&dealremark=%E5%AE%A2%E6%9C%8D%E6%8B%92%E7%BB%9D";
+                //var data = Encoding.ASCII.GetBytes(postData);
+
+                //request.Method = "post";
+                //request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                //request.ContentLength = data.Length;
+
+                //using (var stream = request.GetRequestStream())
+                //{
+                //    stream.Write(data, 0, data.Length);
+                //}
+
+                //var response = (HttpWebResponse)request.GetResponse();
+
+                //var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                //MessageBox.Show(responseString.ToString());
+
+
+
+
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Error: " + err.ToString());
+            }
+
+            //try
+            //{
+            //    var values = new Dictionary<string, string>
+            //    {
+            //       { "dno", "564897281535795200" },
+            //       { "dealremark", "客服拒绝" }
+            //    };
+
+            //    var content = new FormUrlEncodedContent(values);
+
+            //    var response = await client.PostAsync("http://cs.ying168.bet/kzb/fund/refuse", content);
+
+            //    var responseString = await response.Content.ReadAsStringAsync();
+            //    MessageBox.Show(responseString);
+            //}
+            //catch (Exception err)
+            //{
+            //    MessageBox.Show(err.ToString());
+            //}
+        }
+
+        private async Task ___AutoRejectAsync()
+        {
+            var cookie = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
+            WebClient wc = new WebClient();
+
+            wc.Headers.Add("Cookie", cookie);
+            wc.Encoding = Encoding.UTF8;
+            wc.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)");
+            wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
+            var reqparm = new NameValueCollection
+                {
+                    {"dno", "565664129718050816"},
+                    {"dealremark", "客服拒绝"},
+                };
+
+            byte[] result = await wc.UploadValuesTaskAsync("http://cs.ying168.bet/kzb/fund/refuse", "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(result);
+        }
+
+        private async Task ___Task_AutoRejectAsync()
+        {
+            var cookie = Cookiesssss.GetCookieInternal(webBrowser.Url, false);
+            WebClient wc = new WebClient();
+
+            wc.Headers.Add("Cookie", cookie);
+            wc.Encoding = Encoding.UTF8;
+            wc.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)");
+            wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
+            var reqparm = new NameValueCollection
+                {
+                    {"dno", "565664129718050816"},
+                };
+
+            byte[] result = await wc.UploadValuesTaskAsync("http://cs.ying168.bet/task/deposit", "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(result);
         }
     }
 }
