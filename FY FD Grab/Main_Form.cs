@@ -1177,7 +1177,6 @@ namespace FY_FD_Grab
                     __send++;
                     if (__send == 5)
                     {
-                        string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
                         SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
 
@@ -1186,6 +1185,7 @@ namespace FY_FD_Grab
                     }
                     else
                     {
+                        ___WaitNSeconds(10);
                         await ___PlayerListContactNumberAsync(id);
                     }
                 }
@@ -1255,7 +1255,6 @@ namespace FY_FD_Grab
                     __send++;
                     if (__send == 5)
                     {
-                        string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
                         SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
 
@@ -1264,6 +1263,7 @@ namespace FY_FD_Grab
                     }
                     else
                     {
+                        ___WaitNSeconds(10);
                         await ___PlayerListContactNumberAsync(id);
                     }
                 }
@@ -1691,16 +1691,6 @@ namespace FY_FD_Grab
             await ___GetListDepositVerify();
         }
 
-        private void ___WaitNSeconds(int sec)
-        {
-            if (sec < 1) return;
-            DateTime _desired = DateTime.Now.AddSeconds(sec);
-            while (DateTime.Now < _desired)
-            {
-                Application.DoEvents();
-            }
-        }
-
         private void panel1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (__is_send)
@@ -1712,6 +1702,16 @@ namespace FY_FD_Grab
             {
                 __is_send = true;
                 MessageBox.Show("Telegram Notification is Enabled.", __brand_code + " " + __app, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void ___WaitNSeconds(int sec)
+        {
+            if (sec < 1) return;
+            DateTime _desired = DateTime.Now.AddSeconds(sec);
+            while (DateTime.Now < _desired)
+            {
+                Application.DoEvents();
             }
         }
     }
