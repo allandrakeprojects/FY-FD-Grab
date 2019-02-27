@@ -1174,6 +1174,7 @@ namespace FY_FD_Grab
             {
                 if (__isLogin)
                 {
+                    __send++;
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
@@ -1251,6 +1252,7 @@ namespace FY_FD_Grab
             {
                 if (__isLogin)
                 {
+                    __send++;
                     if (__send == 5)
                     {
                         string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
