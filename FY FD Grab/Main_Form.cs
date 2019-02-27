@@ -310,8 +310,7 @@ namespace FY_FD_Grab
                                 label_currentrecord.Visible = false;
                                 __mainFormHandler = Application.OpenForms[0];
                                 __mainFormHandler.Size = new Size(466, 468);
-
-                                string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
+                                
                                 SendITSupport("The application have been logout, please re-login again.");
                                 SendMyBot("The application have been logout, please re-login again.");
                                 __send = 0;
@@ -354,7 +353,6 @@ namespace FY_FD_Grab
 
                         if (webBrowser.Url.ToString().ToLower().Contains("error"))
                         {
-                            string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
                             SendITSupport("BO Error.");
                             SendMyBot("BO Error.");
 
@@ -364,7 +362,6 @@ namespace FY_FD_Grab
                     }
                     catch (Exception err)
                     {
-                        string datetime = DateTime.Now.ToString("dd MMM HH:mm:ss");
                         SendITSupport("There's a problem to the server, please re-open the application.");
                         SendMyBot(err.ToString());
 
@@ -383,12 +380,32 @@ namespace FY_FD_Grab
         
         private void ___PlayerLastBillNo()
         {
-            if (Properties.Settings.Default.______last_bill_no == "")
+            try
             {
-                ___GetLastBillNo();
-            }
+                if (Properties.Settings.Default.______last_bill_no == "")
+                {
+                    ___GetLastBillNo();
+                }
 
-            label_player_last_bill_no.Text = "Last Bill No.: " + Properties.Settings.Default.______last_bill_no;
+                label_player_last_bill_no.Text = "Last Bill No.: " + Properties.Settings.Default.______last_bill_no;
+            }
+            catch (Exception err)
+            {
+                __send++;
+                if (__send == 5)
+                {
+                    SendMyBot(err.ToString());
+                    SendITSupport("There's a problem to the server, please re-open the application.");
+
+                    __isClose = false;
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    ___WaitNSeconds(10);
+                    ___PlayerLastBillNo();
+                }
+            }
         }
 
         private void ___GetLastBillNo()
