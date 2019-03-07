@@ -356,7 +356,7 @@ namespace FY_FD_Grab
                                 pictureBox_loader.Visible = true;
                                 label_player_last_bill_no.Visible = true;
                                 webBrowser.WebBrowserShortcutsEnabled = false;
-                                ___PlayerLastBillNo();
+                                await ___PlayerLastBillNoAsync();
                                 await ___GetListDepositVerify();
                                 await ___GetPlayerListsRequest();
                             }
@@ -389,13 +389,15 @@ namespace FY_FD_Grab
             timer_landing.Stop();
         }
         
-        private void ___PlayerLastBillNo()
+        private async Task ___PlayerLastBillNoAsync()
         {
+            Properties.Settings.Default.______last_bill_no = "";
+            
             try
             {
                 if (Properties.Settings.Default.______last_bill_no == "")
                 {
-                    ___GetLastBillNo();
+                    await ___GetLastBillNoAsync();
                 }
 
                 label_player_last_bill_no.Text = "Last Bill No.: " + Properties.Settings.Default.______last_bill_no;
@@ -414,12 +416,12 @@ namespace FY_FD_Grab
                 else
                 {
                     ___WaitNSeconds(10);
-                    ___PlayerLastBillNo();
+                    await ___PlayerLastBillNoAsync();
                 }
             }
         }
 
-        private void ___GetLastBillNo()
+        private async Task ___GetLastBillNoAsync()
         {
             try
             {
@@ -438,7 +440,7 @@ namespace FY_FD_Grab
                         ["token"] = token
                     };
 
-                    var result = wb.UploadValues("http://192.168.10.252:8080/API/lastFDRecord", "POST", data);
+                    byte[] result = await wb.UploadValuesTaskAsync("http://192.168.10.252:8080/API/lastFDRecord", "POST", data);
                     string responsebody = Encoding.UTF8.GetString(result);
                     var deserializeObject = JsonConvert.DeserializeObject(responsebody);
                     JObject jo = JObject.Parse(deserializeObject.ToString());
@@ -464,13 +466,13 @@ namespace FY_FD_Grab
                     else
                     {
                         ___WaitNSeconds(10);
-                        ___GetLastBillNo2();
+                        await ___GetLastBillNo2Async();
                     }
                 }
             }
         }
 
-        private void ___GetLastBillNo2()
+        private async Task ___GetLastBillNo2Async()
         {
             try
             {
@@ -489,7 +491,7 @@ namespace FY_FD_Grab
                         ["token"] = token
                     };
 
-                    var result = wb.UploadValues("http://zeus.ssitex.com:8080/API/lastFDRecord", "POST", data);
+                    var result = await wb.UploadValuesTaskAsync("http://zeus.ssitex.com:8080/API/lastFDRecord", "POST", data);
                     string responsebody = Encoding.UTF8.GetString(result);
                     var deserializeObject = JsonConvert.DeserializeObject(responsebody);
                     JObject jo = JObject.Parse(deserializeObject.ToString());
@@ -515,7 +517,7 @@ namespace FY_FD_Grab
                     else
                     {
                         ___WaitNSeconds(10);
-                        ___GetLastBillNo();
+                        await ___GetLastBillNoAsync();
                     }
                 }
             }
