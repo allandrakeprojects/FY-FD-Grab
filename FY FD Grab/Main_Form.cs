@@ -25,7 +25,6 @@ namespace FY_FD_Grab
         private bool __isLogin = false;
         private bool __isClose;
         private bool __isBreak = false;
-        private bool __is_send = true;
         private int __secho;
         private int __display_length = 5000;
         private int __total_page;
@@ -102,9 +101,7 @@ namespace FY_FD_Grab
                 return cp;
             }
         }
-
-        public bool Is_send { get => __is_send; set => __is_send = value; }
-
+       
         private bool CheckAeroEnabled()
         {
             if (Environment.OSVersion.Version.Major >= 6)
@@ -325,6 +322,12 @@ namespace FY_FD_Grab
                                 SendITSupport("The application have been logout, please re-login again.");
                                 SendMyBot("The application have been logout, please re-login again.");
                                 __send = 0;
+
+                                if (!Properties.Settings.Default.______is_send_telegram)
+                                {
+                                    __isClose = false;
+                                    Environment.Exit(0);
+                                }
                             }
 
                             __isLogin = false;
@@ -1126,7 +1129,7 @@ namespace FY_FD_Grab
 
         private void SendITSupport(string message)
         {
-            if (__is_send)
+            if (Properties.Settings.Default.______is_send_telegram)
             {
                 try
                 {
@@ -1777,14 +1780,18 @@ namespace FY_FD_Grab
 
         private void panel1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (__is_send)
+            label1.Visible = false;
+
+            if (Properties.Settings.Default.______is_send_telegram)
             {
-                __is_send = false;
+                Properties.Settings.Default.______is_send_telegram = false;
+                Properties.Settings.Default.Save();
                 MessageBox.Show("Telegram Notification is Disabled.", __brand_code + " " + __app, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                __is_send = true;
+                Properties.Settings.Default.______is_send_telegram = true;
+                Properties.Settings.Default.Save();
                 MessageBox.Show("Telegram Notification is Enabled.", __brand_code + " " + __app, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
